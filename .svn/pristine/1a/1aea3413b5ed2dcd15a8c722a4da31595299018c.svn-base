@@ -1,0 +1,400 @@
+\documentclass{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usetheme{Ilmenau}
+\usecolortheme{beaver}
+
+\definecolor{red2}{RGB}{145,7,7}
+\definecolor{red3}{RGB}{204,7,7}
+
+\setbeamerfont{section in head/foot}{size=\Tiny, shape=\scshape}
+
+%modification couleur block normal
+\setbeamercolor{block title}{fg=red2,bg=gray!50}
+\setbeamercolor{block body}{bg=block title.bg!50!bg}
+
+%modification couleur block exemple
+\setbeamercolor{block title example}{fg=white,bg=black!50}
+\setbeamercolor{block body example}{bg=gray!20}
+
+%modification puce item
+\setbeamertemplate{itemize item}[circle]
+\setbeamercolor{itemize item}{fg=red2}
+
+%modification puce subitem
+\setbeamertemplate{itemize subitem}[square]
+\setbeamercolor{itemize subitem}{fg=red2}
+
+
+\setbeamercolor{item projected}{bg=red2}
+\setbeamertemplate{item projected}
+
+
+\AtBeginEnvironment{theorem}{%
+  \setbeamercolor{block title}{fg=red3,bg=block title.bg!30!bg}
+}
+
+\title{- Soutenance -\\ Rendu 3D}
+\author{\textsc{Bauchez} Marguerite(21803320)  \textsc{Coquerez} Olivier(21803239) \\ \textsc{Lebranchu} Paul(21403460)   \textsc{Lemaire} Raphaëlle(21802756) }
+\institute{Université de Caen Normandie}
+
+
+
+\begin{document}
+
+
+\begin{frame}
+	\begin{figure}[t]
+        \includegraphics[scale=0.1]{Images/logo.png}
+	\end{figure}
+	
+	\titlepage
+\end{frame}
+
+\begin{frame}
+	\tableofcontents
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+\frametitle{Introduction: Qu'est ce que le rendu 3D par lancer de rayons? }
+
+\begin{itemize}
+
+
+\item Le rendu 3D par lancer de rayons
+    \pause
+
+\item Pourquoi ce choix?
+    \pause
+
+\item Les points à implémenter.
+\end{itemize}
+\end{frame}
+
+\section{POVRAY}
+
+\begin{frame}
+\frametitle{Présentation Povray et Interpretre}
+\begin{block}{Povray}
+\begin{itemize}
+\item Logiciel de lancer de rayon
+\item Nécessite caméra, source lumineuse et plan représentant un sol
+\item Génère différentes formes (box, sphère, cylindre, cone)
+\item Paramètres optionnels (exemple: couleur, rotation, déformation)
+\end{itemize}
+\end{block}
+\pause
+\begin{block}{Méthodes Interprete}
+\begin{itemize}
+\item Récupérer les informations liés à la caméra et la lumière
+\item Récupérer les informations liés aux formes à dessiner
+\item Récupérer les paramètres optionnels liés au formes
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Création formes}
+
+\begin{frame}
+
+\end{frame}
+
+\section{Implémentation de la lumière}
+
+\begin{frame}
+\frametitle{Récupération des élément nécessaire à la lumière sur chaque forme}
+\begin{block}{récupération du point d'incidence}
+\begin{itemize}
+\item Récupération du centre
+\item Recherche du point commun entre la droite point lumineux- centre et la forme
+\item Choix du point le plus proche et pourquoi
+\end{itemize}
+\end{block}
+\begin{block}{récupération de la droite normal}
+\begin{itemize}
+\item Récupération du point d'incidence
+\item Calcul d'un vecteur normal au plan
+\item Récupération de la droite
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Réfléxion}
+\begin{block}{Le principe de réflexion en physique}
+\begin{minipage}[c]{0.45\linewidth}
+\fbox{\includegraphics[scale=0.25]{Images/reflexion.jpg}}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+Shéma de la réflexion
+\end{minipage}
+\end{block}
+\only<2>{Quand l'utiliser?}
+
+\onslide<3->{\begin{block}{La méthode réflexion de notre code}
+\begin{itemize}
+\item Création du rayon incident
+\item Récupération de l'angle entre le rayon incident et la droite normale
+\item Création du rayon réfléchit
+\end{itemize}
+\end{block}}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Réfraction}
+\onslide<1-2>{\begin{block}{Le principe de réfraction en physique}
+\begin{minipage}[c]{0.45\linewidth}
+\fbox{\includegraphics[scale=0.33]{Images/refraction2.jpg}}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+Shéma de la réfraction
+\end{minipage}
+\end{block}}
+\only<1>{Quand l'utiliser et comment}
+
+\only<1>{\begin{block}{La réfraction de la lumière avec passage d'un milieu air à un milieu eau}
+\begin{minipage}[c]{0.45\linewidth}
+\fbox{\includegraphics[scale=0.33]{Images/refraction1.jpg}}
+\end{minipage}
+\begin{minipage}[c]{0.45\linewidth}
+Shéma de la réfraction dans l'eau
+\end{minipage}
+\end{block}}
+
+\onslide<2->{\begin{block}{La méthode réfraction de notre code}
+\begin{itemize}
+\item Création du rayon incident
+\item Recupération de l'angle entre le rayon incident et la droite normale
+\item Création du rayon réfraction
+\end{itemize}
+\end{block}}
+
+\end{frame}
+
+\section{Ombrage de phong}
+
+\begin{frame}
+\begin{block}{L'ombrage ambient}
+
+\begin{theorem}[Composante ambiante] 
+$ Ia = ia * ka$
+\end{theorem}
+\end{block}
+\pause
+\begin{block}{L'ombrage diffus}
+
+\begin{theorem}[Composante diffuse] 
+$ Id = id * kd (vectL * vectN) = id * kd * cos(a)$
+\end{theorem}
+\end{block}
+\pause
+\begin{block}{L'ombrage spéculair}
+
+\begin{theorem}[Composante spéculaire] 
+$ Is = is * ks * (vectR * VectV)^a = is * ks * cos(o)^a$
+\end{theorem}
+\end{block}
+
+\end{frame}
+
+\section{Image finale}
+
+\begin{frame}
+\frametitle{Room}
+\begin{block}{Rôle de la classe}
+\begin{itemize}
+\item Créer les formes à afficher
+\item Implémenter les ombres et la lumière
+\item Renvoyer l'image à enregistrer
+\end{itemize}
+\end{block}
+\pause
+\begin{block}{Méthode de dessin}
+\begin{itemize}
+\item Dessin parallélépipède, sphère et cylindre
+\item Spécificité des cônes
+\item Dessin des ombres portées
+\item Prévisualisation de l'image
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Render}
+\begin{block}{Rôle de la classe}
+\begin{itemize}
+\item Demander à l'utilisateur de choisir un fichier POVRAY
+\item Analyser le fichier grâce à la classe Inteprète
+\item Créé l'image grâce à la classe Room
+\item Enregistrer l'image
+\end{itemize}
+\end{block}
+\pause
+\begin{block}{Spécificité de la classe}
+\begin{itemize}
+\item Classe exécutable
+\item Méthode gérant une application javafx
+\item Main lance l'application javafx
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\section{Démonstration}
+
+\begin{frame}
+\frametitle{Test formes}
+
+\begin{exampleblock}{Rendu vs POVRAY}
+\centering
+\includegraphics[scale=0.1]{Images/testFichierTestFormes.png} 
+\hspace{20pt}
+\includegraphics[scale=0.15]{Images/testFormes.png}
+
+\end{exampleblock}
+ 
+\pause
+
+\begin{alertblock}{Erreur générale}
+\begin{itemize}
+\item Luminosité et ombre portée
+\item Couleur des objets
+\item Angle de caméra et position objet
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Test sphères}
+
+\begin{exampleblock}{Rendu vs POVRAY}
+\centering
+\includegraphics[scale=0.1]{Images/testFichierSphere.png}
+\hspace{20pt}
+\includegraphics[scale=0.15]{Images/testSphere.png}
+\end{exampleblock}
+
+\pause
+
+\begin{alertblock}{Erreur spécifique au sphères}
+\begin{itemize}
+\item Taille de la sphère
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Test parallélépipèdes}
+
+\begin{exampleblock}{Rendu vs POVRAY}
+\centering
+\includegraphics[scale=0.1]{Images/testFichierBox.png}
+\hspace{20pt}
+\includegraphics[scale=0.15]{Images/testBox.png}
+\end{exampleblock}
+ 
+\pause
+
+\begin{alertblock}{Erreur spécifique au parallélépipèdes}
+\begin{itemize}
+\item Profondeur du parallélépipèdes
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Test cônes}
+
+\begin{exampleblock}{Rendu vs POVRAY}
+\centering
+\includegraphics[scale=0.1]{Images/testFichierCone.png}
+\hspace{20pt}
+\includegraphics[scale=0.15]{Images/testCone.png}
+
+\end{exampleblock}
+
+\pause
+
+\begin{alertblock}{Erreur spécifique au cône}
+\begin{itemize}
+\item Forme non ressemblante
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Test cylindres}
+
+\begin{exampleblock}{Rendu vs POVRAY}
+\centering
+\includegraphics[scale=0.1]{Images/testFichierCylindre.png}
+\hspace{20pt}
+\includegraphics[scale=0.15]{Images/testCylindre.png}
+
+\end{exampleblock}
+
+\pause
+
+\begin{alertblock}{Erreur spécifique au cylindre}
+\begin{itemize}
+\item Inclinaison du cylindre
+\end{itemize}
+\end{alertblock}
+
+\end{frame}
+
+\section{Conclusion}
+
+\begin{frame}
+\frametitle{Conclusion}
+
+\begin{itemize}
+
+\item Problèmes rencontrés
+\pause
+\item Objectifs remplis
+\pause
+\item Objectifs en cours de développement
+
+\end{itemize}
+\end{frame}
+
+\section{Idées d'amélioration}
+
+\begin{frame}
+\frametitle{Pistes d'amélioration}
+
+\begin{enumerate}[I]
+\item<1-> Affichage
+\begin{itemize}
+\item Améliorer la position des objets et de la caméra
+\item Transparence
+\item Miroir
+\end{itemize}
+\item<2-> Ombrage et Lumière
+\begin{itemize}
+\item Ombre porté
+\item Réfraction lié a la transparence (ombre multiple)
+\item Réflexion de la lumière par les miroir
+\end{itemize}
+\item<3-> Confort d'utilisation
+\begin{itemize}
+\item Possibilité de sauvegardé ou non l'image prévisualisé
+\item Prendre en paramètre une liste de fichier povray
+\end{itemize}
+\end{enumerate}
+\end{frame}
+
+
+\end{document}
